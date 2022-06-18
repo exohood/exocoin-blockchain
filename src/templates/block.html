@@ -1,0 +1,311 @@
+<div class="row">
+    <ol class="breadcrumb bm">
+        <li><a href="/">Home</a></li>
+        <li>Block - {{blk_hash}}</li>
+    </ol>
+</div>
+<div class="row">
+    <div class="panel panel-bm blockAbstract">
+        <div class="panel-heading">
+            <div class="panel-heading-title">Summary</div>
+        </div>
+        <div class="panel-body text-center">
+            <div class="blockAbstract-inner">
+                <div class="blockAbstract-section">
+                    <dl>
+                        <dt>Height</dt>
+                        <dd>{{blk_height}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Confirmations</dt>
+                        <dd>{{confirmations}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Size</dt>
+                        <dd>{{blk_size}} <span class="text-muted">kB</span></dd>
+                    </dl>
+                    <dl>
+                        <dt>Tx Count</dt>
+                        <dd>{{no_txs}}</dd>
+                    </dl>
+                </div>
+                <div class="blockAbstract-section">
+                    <dl>
+                        <dt>Version</dt>
+                        <dd>{{major_ver}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Time</dt>
+                        <dd class="time-localization">{{blk_timestamp}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Reward</dt>
+                        <dd class="text-monospace">{{blk_reward}} <span class="text-muted">EXO</span></dd>
+                    </dl>
+                    <dl>
+                        <dt>Total Fees</dt>
+                        <dd>{{sum_fees}} <span class="text-muted">EXO</span></dd>
+                    </dl>
+                </div>
+                <div class="blockAbstract-section blockAbstract-section-smallsize">
+                    <dl>
+                        <dt>Block Hash</dt>
+                        <dd>
+                            <a href="/block/{{blk_hash}}">
+                                {{blk_hash}}
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="blockRussianWordBreak">Prev Block</dt>
+                        <dd>
+                            {{#have_prev_hash}}
+                            <a href="/block/{{prev_hash}}">
+                                {{prev_hash}}
+                            </a>
+                            {{/have_prev_hash}}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="blockRussianWordBreak">Next Block</dt>
+                        <dd>
+                            {{#have_next_hash}}
+                            <a href="/block/{{next_hash}}">
+                                {{next_hash}}
+                            </a>
+                            {{/have_next_hash}}
+
+                        </dd>
+                    </dl>
+                    {{#has_signature}}
+                    <dl>
+                        <dt class="blockRussianWordBreak">Validated By</dt>
+                        <dd>
+                            <span>{{signature}}</span>
+                        </dd>
+                    </dl>
+                    {{/has_signature}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="panel panel-bm blockTxList">
+        <div class="panel-heading">
+            <div class="panel-heading-title">
+                Transactions
+            </div>
+        </div>
+        <div class="panel-body">
+            {{#is_page_zero}}
+            {{#coinbase_txs}}
+            <div class="tx-item">
+                <table class="table">
+                    <tbody>
+                        <tr class="tx-item-summary">
+                            <td>
+                                <a href="/tx/{{hash}}" class="tx-item-summary-hash">
+                                    {{hash}}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="tx-item-summary-timestamp">
+                                    {{#is_stealth_tx}}
+                                    <span style="background-color: #ccc;"
+                                        class="label label-primary tx-coinbase-label">Stealth</span>
+                                    {{/is_stealth_tx}}
+                                    {{#is_migration_tx}}
+                                    <span style="background-color: #b8dcbe;"
+                                        class="label label-primary tx-coinbase-label">Migration</span>
+                                    {{/is_migration_tx}}
+                                </span>
+                                <span class="tx-item-summary-timestamp time-localization">{{blk_timestamp}}</span>
+                            </td>
+                        </tr>
+
+                        <tr class="txio">
+                            <td>
+                                <ul>
+                                    <li id="in_0">
+                                        <span class="label label-primary tx-coinbase-label">Coinbase</span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {{#is_stealth_tx}}
+                                    {{#tx_outputs}}
+                                    <li>
+                                        <span id="out_{{to}}" title="{{to}}" class="txio-address" style="color:#2ab1f3;">{{to}}</span>
+                                        <span class="txio-amount">{{amount}}</span>
+                                    </li>
+                                    {{/tx_outputs}}
+                                    {{/is_stealth_tx}}
+                                    {{^is_stealth_tx}}
+                                    {{#tx_outputs}}
+                                    <li>
+                                        <a title="{{to}}" href="/address/{{to}}" class="txio-address">{{to}}</a>
+                                        <span class="txio-amount">
+                                            {{amount}}
+                                        </span>
+                                    </li>
+                                    {{/tx_outputs}}
+                                    {{/is_stealth_tx}}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="tx-item-footer">
+                            <td class="tx-item-footer-note"></td>
+                            <td class="tx-item-footer-additional">
+                                <span class="tx-item-footer-additional-box">
+                                    {{sum_outputs}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {{/coinbase_txs}}
+            {{/is_page_zero}}
+            {{#have_txs}}
+            {{#blk_txs}}
+            <div class="tx-item">
+                <table class="table">
+                    <tbody>
+                        <tr class="tx-item-summary">
+                            <td>
+                                <a href="/tx/{{hash}}" class="tx-item-summary-hash">{{hash}}</a>
+                            </td>
+                            <td>
+                                <span class="tx-item-summary-timestamp">
+                                    {{#is_stealth_tx}}
+                                    <span style="background-color: #ccc;"
+                                        class="label label-primary tx-coinbase-label">Stealth</span>
+                                    {{/is_stealth_tx}}
+                                    {{#is_migration_tx}}
+                                    <span style="background-color: #b8dcbe;"
+                                        class="label label-primary tx-coinbase-label">Migration</span>
+                                    {{/is_migration_tx}}
+                                </span>
+                                <span class="tx-item-summary-timestamp">{{tx_fee_rate}} EXO/kB </span>
+                                <span class="tx-item-summary-timestamp">{{tx_fee}} EXO</span>
+                                <span class="tx-item-summary-timestamp time-localization">{{blk_timestamp}}</span>
+                            </td>
+                        </tr>
+                        <tr class="txio">
+                            <td>
+                                <ul>
+                                    {{#tx_inputs}}
+                                    {{#is_public_tx}}
+                                    <li>
+                                        <a href="/address/{{from}}">
+                                            <span title="{{from}}" class="txio-address">{{from}}</span>
+                                        </a>
+                                        <span class="txio-amount">
+                                            {{amount}}
+                                        </span>
+                                    </li>
+                                    {{/is_public_tx}}
+                                    {{^is_public_tx}}
+                                    <li>
+                                        <span>
+                                            <span title="{{from}}" class="txio-address"
+                                                style="color:#2ab1f3;">{{from}}</span>
+                                        </span>
+                                        <span class="txio-amount">
+                                            {{amount}}
+                                        </span>
+                                    </li>
+                                    {{/is_public_tx}}
+                                    {{/tx_inputs}}
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    {{#tx_outputs}}
+                                    <li>
+                                        {{#is_stealth_tx}}
+                                        <span title="{{to}}" class="txio-address" style="color:#2ab1f3;">{{to}}</span>
+                                        {{/is_stealth_tx}}
+                                        {{^is_stealth_tx}}
+                                        <a title="{{to}}" href="/address/{{to}}" class="txio-address">{{to}}</a>
+                                        {{/is_stealth_tx}}
+                                        {{#is_change}}
+                                        <span class="txio-amount"><span class="text-muted">{{amount}}</span></span>
+                                        {{/is_change}}
+                                        {{^is_change}}
+                                        <span class="txio-amount">{{amount}}</span>
+                                        {{/is_change}}
+                                    </li>
+                                    {{/tx_outputs}}
+                                </ul>
+                            </td>
+                        </tr>
+
+                        <tr class="tx-item-footer">
+                            <td class="tx-item-footer-note">
+                                <p class="tx-item-footer-note-inner">
+                                </p>
+                            </td>
+                            <td class="tx-item-footer-additional">
+                                {{#show_more}}
+                                <a href="/tx/{{hash}}" class="tx-item-showalltx">Show All Inputs/Outputs</a>
+                                {{/show_more}}
+                            </td>
+                        </tr>
+                        <tr class="tx-item-footer">
+                            <td class="tx-item-footer-note"></td>
+                            <td class="tx-item-footer-additional">
+                                <span class="tx-item-footer-additional-box">
+                                    {{sum_outputs}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {{/blk_txs}}
+            <div class="page-nav">
+                <ul id="page-pagination" class="pagination-sm pagination">
+                    {{#is_page_zero}}
+                    <li class="first disabled">
+                        <span>&lt;&lt;</span>
+                    </li>
+                    <li class="prev disabled">
+                        <span>&lt;</span>
+                    </li>
+                    {{/is_page_zero}}
+                    {{^is_page_zero}}
+                    <li class="first">
+                        <a href="/block/{{blk_hash}}">&lt;&lt;</a>
+                    </li>
+                    <li class="prev">
+                        <a href="/block/{{blk_hash}}/page/{{prev_page}}">&lt;</a>
+                    </li>
+                    {{/is_page_zero}}
+                    <li class="page active">
+                        <a href="#">{{page_no}} / {{total_page_no}}</a>
+                    </li>
+                    {{#is_last_page}}
+                    <li class="next disabled">
+                        <span href="#">&gt;</span>
+                    </li>
+                    <li class="last disabled">
+                        <span href="#">&gt;&gt;</span>
+                    </li>
+                    {{/is_last_page}}
+                    {{^is_last_page}}
+                    <li class="next">
+                        <a href="/block/{{blk_hash}}/page/{{next_page}}">&gt;</a>
+                    </li>
+                    <li class="last">
+                        <a href="/block/{{blk_hash}}/page/{{total_page_no}}">&gt;&gt;</a>
+                    </li>
+                    {{/is_last_page}}
+                </ul>
+            </div>
+            {{/have_txs}}
+        </div>
+    </div>
+</div>
