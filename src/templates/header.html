@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    {{#refresh}}
+    <meta http-equiv="refresh" content="10">
+    {{/refresh}}
+    <title>Exohood Blockchain Explorer</title>
+    <!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div class="center">
+            <a href="/" target="_self"><img src="/imgs/EXO-header-logo.png"></a>
+            <form action="/search" method="get" class="style-1">
+                <input type="text" name="value" size="104" style="height: 36px;"
+                    placeholder="Search by Block Height, Block Hash, Transaction Hash or EXO Address">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+    </header>
+    <script>
+        var TimeAgo = (function () {
+            var self = {};
+
+            // Public Methods
+            self.locales = {
+                prefix: '',
+                sufix: 'ago',
+
+                seconds: 'less than a minute',
+                minute: 'about a minute',
+                minutes: '%d minutes',
+                hour: 'about an hour',
+                hours: 'about %d hours',
+                day: 'a day',
+                days: '%d days',
+                month: 'about a month',
+                months: '%d months',
+                year: 'about a year',
+                years: '%d years'
+            };
+
+            self.inWords = function (timeAgo) {
+                var seconds = Math.floor((new Date() - parseInt(timeAgo)) / 1000),
+                    separator = this.locales.separator || ' ',
+                    words = this.locales.prefix + separator,
+                    interval = 0,
+                    intervals = {
+                        year: seconds / 31536000,
+                        month: seconds / 2592000,
+                        day: seconds / 86400,
+                        hour: seconds / 3600,
+                        minute: seconds / 60
+                    };
+
+                var distance = this.locales.seconds;
+
+                for (var key in intervals) {
+                    interval = Math.floor(intervals[key]);
+
+                    if (interval > 1) {
+                        distance = this.locales[key + 's'];
+                        break;
+                    } else if (interval === 1) {
+                        distance = this.locales[key];
+                        break;
+                    }
+                }
+
+                distance = distance.replace(/%d/i, interval);
+                words += distance + separator + this.locales.sufix;
+
+                return words.trim();
+            };
+
+            return self;
+        }());
+
+        function formatNumber(nStr)
+        {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+
+        $(document).ready(function () {
+            $('.txio-address').each(function (i, d) {
+                var addr = $(this).text();
+
+                if (addr.length != 98 && addr.length != 64) {
+                    return;
+                }
+
+                var shrinkedAddr = addr.substr(0, 20) + '...' + addr.substr(-20);
+                $(this).html(shrinkedAddr);
+                $(this).css("opacity", "1");
+            });
+            $('.txHash').each(function (i, d) {
+                var txhash = $(this).text();
+                var shrinkedHash = txhash.substr(0, 16) + '...' + txhash.substr(-16);
+                $(this).html(shrinkedHash);
+                $(this).css("opacity", "1");
+            });
+            $('.timeago').each(function (i, d) {
+                var time = new Date($(this).text()).getTime();
+                if (Number.isNaN(time)) {
+                    time = new Date(parseInt($(this).text()) * 1000).getTime();
+                }
+                $(this).text(TimeAgo.inWords(time));
+            });
+
+            var hash = $(location).attr('hash');
+            $(hash).each(function (i, d) {
+                $(this).css("background-color", "rgb(233, 233, 233)");
+            });
+
+            $(".time-localization").each(function (i, d) {
+                if(Date.parse($(this).text())) {
+                    var d = new Date($(this).text());
+                    $(this).text(new Date(d.getTime() - d.getTimezoneOffset() * 60000).toLocaleString());
+                    $(this).css("opacity", 1);
+                }
+            });
+
+            $("#circ-supply").each(function (i, d) {
+                var f = $(this);
+                $.get("https://supply.exohood.com/", function(data) {
+                    f.text(formatNumber(String(data["circulating-supply"])));
+                });
+            });
+        });
+
+
+    </script>
+    <div class="main-body">
+        <div class="container">
