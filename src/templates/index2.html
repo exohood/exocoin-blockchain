@@ -1,0 +1,173 @@
+{{#is_page_zero}}
+<div class="row">
+
+    {{#show_alert}}
+    <div class="alert" style="background-color: {{{alert_color}}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{{alert_message}}}
+    </div>
+    {{/show_alert}}
+
+    {{{mempool_info}}}
+    <div class="col-xs-6" style="padding-right: 0; padding-left: 10px;">
+        <div class="panel panel-bm indexNetworkStats">
+            <div class="panel-heading">
+                <div class="panel-heading-title">Network Status</div>
+            </div>
+            <div class="panel-body" style="height: 243px;">
+                {{#network_info}}
+                <ul>
+                    <li>
+                        <dl>
+                            <dt><span class="text-muted">Block Size Limit</span></dt>
+                            <dd>{{block_size_limit}} <span class="text-muted">kB</span></dd>
+                        </dl>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt><span class="text-muted">Transactions</span></dt>
+                            <dd>{{tx_count}}</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><span class="text-muted">Fee per kB</span></dt>
+                            <dd>{{fee_per_kb}} <span class="text-muted">ETN</span></dd>
+                        </dl>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt><span class="text-muted">Circulating Supply</span></dt>
+                            <dd><span id="circ-supply"></span> <span class="text-muted">ETN</span></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><span class="text-muted">Max Supply</span></dt>
+                            <dd>21,000,000,000.00 <span class="text-muted">ETN</span></dd>
+                        </dl>
+                    </li>
+                </ul>
+                {{/network_info}}
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6" style="padding-right: 0; padding-left: 10px;">
+        <div class="panel panel-bm indexNetworkStats">
+            <div class="panel-body">
+                <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>
+                <div class="coinmarketcap-currency-widget" data-currencyid="2137" data-base="USD" data-secondary=""
+                    data-ticker="true" data-rank="false" data-marketcap="true" data-volume="true"
+                    data-statsticker="false" data-stats="USD"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/is_page_zero}}
+<div class="row">
+    <div class="panel panel-bm indexBlockList">
+        <div class="panel-heading">
+            <div class="panel-heading-corner">
+
+                {{^is_page_zero}}
+                <a href="/page/{{prev_page}}"><i class="icon-arrow-left"></i> Previous</a>
+                | Page {{page_no}}/<a href="/page/{{total_page_no}}">{{total_page_no}}</a>
+                | <a href="/page/{{next_page}}">Next<i class="icon-arrow-right"></i></a>
+                {{/is_page_zero}}
+                {{#is_page_zero}}
+
+                <a href="/page/{{next_page}}">More<i class="icon-arrow-right"></i></a>
+                {{/is_page_zero}}
+            </div>
+            <div class="panel-heading-title">Latest Blocks</div>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tbody>
+                    <tr id="append">
+                        <th class="text-center">Height</th>
+                        <th class="text-center">Block Size</th>
+                        <th class="text-center">Reward</th>
+                        <th class="text-center">Time</th>
+                        <th class="text-center">Block Hash</th>
+                        <th class="text-center"></th>
+                    </tr>
+                    {{#txs}}
+                    <tr data-id="680,319">
+                        <td class="text-center"><a href="/block/{{height}}">{{height}}</a></td>
+                        <td class="text-center">{{blk_size}} <span class="text-muted">kB</span></td>
+                        <td class="text-center">{{sum_outputs_short}} <span class="text-muted">ETN</span></td>
+                        <td class="text-center indexBlockList-blockTimestamp timeago">{{timestamp}}</td>
+                        <td class="text-center indexBlockList-blockhash"><a href="/block/{{blk_hash}}">{{blk_hash}}</a>
+                        </td>
+                        {{#has_multiple_tx}}
+                        <td class="text-center"><span class="text-muted">{{tx_count}} Txs</span></td>
+                        {{/has_multiple_tx}}
+                        {{^has_multiple_tx}}
+                        <td class="text-center"><span class="text-muted">{{tx_count}} Tx</span></td>
+                        {{/has_multiple_tx}}
+                    </tr>
+                    {{/txs}}
+                </tbody>
+            </table>
+            {{^is_page_zero}}
+            <div class="page-nav">
+                <ul id="page-pagination" class="pagination-sm pagination">
+                    {{#is_page_zero}}
+                    <li class="first disabled">
+                        <a href="/page/1">&lt;&lt;</a>
+                    </li>
+                    <li class="prev disabled">
+                        <a href="/page/{{prev_page}}">&lt;</a>
+                    </li>
+                    {{/is_page_zero}}
+                    {{^is_page_zero}}
+                    <li class="first">
+                        <a href="/page/1">&lt;&lt;</a>
+                    </li>
+                    <li class="prev">
+                        <a href="/page/{{prev_page}}">&lt;</a>
+                    </li>
+                    {{/is_page_zero}}
+                    <li class="page active">
+                        <a href="#">{{page_no}} / {{total_page_no}}</a>
+                    </li>
+                    {{#is_last_page}}
+                    <li class="next disabled">
+                        <a href="#">&gt;</a>
+                    </li>
+                    <li class="last disabled">
+                        <a href="#">&gt;&gt;</a>
+                    </li>
+                    {{/is_last_page}}
+                    {{^is_last_page}}
+                    <li class="next">
+                        <a href="/page/{{next_page}}">&gt;</a>
+                    </li>
+                    <li class="last">
+                        <a href="/page/{{total_page_no}}">&gt;&gt;</a>
+                    </li>
+                    {{/is_last_page}}
+                </ul>
+            </div>
+            {{/is_page_zero}}
+
+        </div>
+    </div>
+</div>
+
+<h3 style="font-size: 17px; font-weight: 100; margin-top: 20px">
+    {{#enable_autorefresh_option}}
+    |
+    {{#refresh}}
+    <a href="/">Autorefresh is ON (10 s)</a>
+    {{/refresh}}
+    {{^refresh}}
+    <a href="/autorefresh">Autorefresh is OFF</a>
+    {{/refresh}}
+    {{/enable_autorefresh_option}}
+</h3>
