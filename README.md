@@ -1,4 +1,4 @@
-# Exohood Blockchain Explorer
+# ExoCoin Blockchain Explorer
 
 ## Official Explorer URLs
 
