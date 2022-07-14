@@ -8,7 +8,7 @@ Mainnet:
 
 Testnet:
 
- - [https://blockexplorer.testnet.exohood.com/](https://blockexplorer.testnet.exohood.com/) 🚧 Coming Soon
+ - [tesnet.blockexplorer.exohood.com/](tesnet.blockexplorer.exohood.com/) 🚧 Coming Soon
 
 ## Development branch
 
