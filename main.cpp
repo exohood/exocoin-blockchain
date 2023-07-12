@@ -1,6 +1,5 @@
 #define CROW_ENABLE_SSL
 
-
 #include "src/page.h"
 
 #include "ext/crow/crow.h"
